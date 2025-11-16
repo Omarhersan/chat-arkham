@@ -3,7 +3,7 @@
  */
 
 export const OPENAI_CONFIG = {
-  MODEL_ID: 'ft:gpt-4o-mini-2024-07-18:personal:arkham-contract:CcK1RP96',
+  MODEL_ID: "ft:gpt-4o-mini-2024-07-18:personal:arkham-contract:CcK1RP96",
   SYSTEM_PROMPT: `Eres un asistente especializado en contratos de arrendamiento. Tu función es responder preguntas sobre contratos de arrendamiento de manera precisa y detallada, basándote en la información del contrato. 
 
 Debes:

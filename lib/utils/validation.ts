@@ -2,13 +2,13 @@
  * Validation utilities for chat input
  */
 
-import { CHAT_CONFIG } from '@/lib/config/constants';
-import type { Message } from '@/lib/types/chat';
+import { CHAT_CONFIG } from "@/lib/config/constants";
+import type { Message } from "@/lib/types/chat";
 
 export class ValidationError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'ValidationError';
+    this.name = "ValidationError";
   }
 }
 
@@ -16,14 +16,14 @@ export class ValidationError extends Error {
  * Validates a user message
  */
 export function validateMessage(content: string): void {
-  if (!content || typeof content !== 'string') {
-    throw new ValidationError('Message content is required');
+  if (!content || typeof content !== "string") {
+    throw new ValidationError("Message content is required");
   }
 
   const trimmedContent = content.trim();
-  
+
   if (trimmedContent.length === 0) {
-    throw new ValidationError('Message cannot be empty');
+    throw new ValidationError("Message cannot be empty");
   }
 
   if (trimmedContent.length > CHAT_CONFIG.MAX_MESSAGE_LENGTH) {
@@ -38,26 +38,29 @@ export function validateMessage(content: string): void {
  */
 export function validateMessages(messages: unknown): messages is Message[] {
   if (!Array.isArray(messages)) {
-    throw new ValidationError('Messages must be an array');
+    throw new ValidationError("Messages must be an array");
   }
 
   if (messages.length === 0) {
-    throw new ValidationError('At least one message is required');
+    throw new ValidationError("At least one message is required");
   }
 
   for (const msg of messages) {
-    if (!msg || typeof msg !== 'object') {
-      throw new ValidationError('Invalid message format');
+    if (!msg || typeof msg !== "object") {
+      throw new ValidationError("Invalid message format");
     }
 
     const message = msg as Partial<Message>;
 
-    if (!message.role || !['user', 'assistant', 'system'].includes(message.role)) {
-      throw new ValidationError('Invalid message role');
+    if (
+      !message.role ||
+      !["user", "assistant", "system"].includes(message.role)
+    ) {
+      throw new ValidationError("Invalid message role");
     }
 
-    if (!message.content || typeof message.content !== 'string') {
-      throw new ValidationError('Message content must be a string');
+    if (!message.content || typeof message.content !== "string") {
+      throw new ValidationError("Message content must be a string");
     }
   }
 
@@ -70,6 +73,6 @@ export function validateMessages(messages: unknown): messages is Message[] {
 export function sanitizeInput(input: string): string {
   return input
     .trim()
-    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '') // Remove control characters
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, "") // Remove control characters
     .slice(0, CHAT_CONFIG.MAX_MESSAGE_LENGTH);
 }

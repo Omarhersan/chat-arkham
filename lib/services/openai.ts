@@ -2,9 +2,9 @@
  * OpenAI Service - Handles interactions with OpenAI fine-tuned model
  */
 
-import OpenAI from 'openai';
-import { OPENAI_CONFIG, CHAT_CONFIG } from '@/lib/config/constants';
-import type { Message, OpenAIMessage } from '@/lib/types/chat';
+import OpenAI from "openai";
+import { OPENAI_CONFIG, CHAT_CONFIG } from "@/lib/config/constants";
+import type { Message, OpenAIMessage } from "@/lib/types/chat";
 
 // Initialize OpenAI client
 const openai = new OpenAI({
@@ -31,7 +31,7 @@ export async function getAIResponse(messages: Message[]): Promise<string> {
     // Prepare messages with system prompt
     const formattedMessages: OpenAIMessage[] = [
       {
-        role: 'system',
+        role: "system",
         content: OPENAI_CONFIG.SYSTEM_PROMPT,
       },
       ...formatMessagesForOpenAI(messages),
@@ -47,21 +47,21 @@ export async function getAIResponse(messages: Message[]): Promise<string> {
 
     // Extract and return the assistant's response
     const response = completion.choices[0]?.message?.content;
-    
+
     if (!response) {
-      throw new Error('No response received from OpenAI');
+      throw new Error("No response received from OpenAI");
     }
 
     return response;
   } catch (error) {
-    console.error('Error calling OpenAI API:', error);
-    
+    console.error("Error calling OpenAI API:", error);
+
     // Handle specific OpenAI errors
     if (error instanceof OpenAI.APIError) {
       throw new Error(`OpenAI API Error: ${error.message}`);
     }
-    
-    throw new Error('Failed to get response from AI model');
+
+    throw new Error("Failed to get response from AI model");
   }
 }
 
@@ -75,11 +75,13 @@ export function validateOpenAIConfig(): boolean {
 /**
  * Streams the AI response for better UX (optional feature)
  */
-export async function* streamAIResponse(messages: Message[]): AsyncGenerator<string> {
+export async function* streamAIResponse(
+  messages: Message[]
+): AsyncGenerator<string> {
   try {
     const formattedMessages: OpenAIMessage[] = [
       {
-        role: 'system',
+        role: "system",
         content: OPENAI_CONFIG.SYSTEM_PROMPT,
       },
       ...formatMessagesForOpenAI(messages),
@@ -100,7 +102,7 @@ export async function* streamAIResponse(messages: Message[]): AsyncGenerator<str
       }
     }
   } catch (error) {
-    console.error('Error streaming from OpenAI API:', error);
-    throw new Error('Failed to stream response from AI model');
+    console.error("Error streaming from OpenAI API:", error);
+    throw new Error("Failed to stream response from AI model");
   }
 }
